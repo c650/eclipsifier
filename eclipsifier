@@ -1,0 +1,43 @@
+#!/usr/bin/ruby
+
+require 'fileutils'
+
+if ARGV.length != 4
+	puts "Usage: ./program [code dir] [new project dir] [example dir] [project name]"
+	exit(1)
+end
+
+puts "Starting to make Eclipse folder..."
+
+code_dir = File.expand_path(ARGV[0])
+new_project_dir = File.expand_path(ARGV[1])
+example_dir = File.expand_path(ARGV[2])
+
+# Start initializing directories...
+FileUtils.mkdir_p(new_project_dir)
+
+src_dir = new_project_dir+"/src"
+FileUtils.mkdir_p(src_dir)
+
+bin_dir = new_project_dir+"/bin"
+FileUtils.mkdir_p(bin_dir)
+
+# copy stuff into new directory
+puts "Copying All Java Files to #{new_project_dir}/src..."
+
+Dir.chdir(code_dir)
+FileUtils.cp_r(Dir.glob("*.java"), src_dir)
+
+puts "Copying Hidden Configuration Files..."
+
+Dir.chdir(example_dir)
+FileUtils.cp_r(["./.classpath", "./.settings", "./.project"], new_project_dir)
+
+Dir.chdir(new_project_dir)
+project_file = new_project_dir+"/.project"
+
+puts "Naming project to #{ARGV[3]}"
+f = File.read(project_file).gsub("PROJECT_NAME", ARGV[3])
+File.open(project_file, "w") do |file|
+	file.puts f
+end
