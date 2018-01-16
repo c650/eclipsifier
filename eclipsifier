@@ -1,5 +1,11 @@
 #!/usr/bin/ruby
 
+# eclipsifier
+# Author: Charles Bailey (github.com/c650).
+# Licensed under the MIT License.
+# Feel free to use, improve, or contribute :).
+# Let's beat Eclipse together.
+
 require 'fileutils'
 
 if ARGV.length != 4
